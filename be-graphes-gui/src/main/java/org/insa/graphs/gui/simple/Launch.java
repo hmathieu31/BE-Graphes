@@ -16,7 +16,12 @@ import org.insa.graphs.model.Path;
 import org.insa.graphs.model.io.BinaryGraphReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.insa.graphs.model.io.PathReader;
-
+/**
+ * 
+ * @author Hugo Mathieu
+ * 26/03/2021
+ *
+ */
 public class Launch {
 
     /**
