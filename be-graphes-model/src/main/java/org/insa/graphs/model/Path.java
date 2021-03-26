@@ -203,8 +203,24 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public boolean isValid() {
-        // TODO:
-        return false;
+        boolean valid = false;
+        if (this.isEmpty()) { // Vérification de la condition 1 suffisante de validité du Path
+            valid = true;
+            return valid;
+        }
+        if (this.arcs.size() == 0) { // Vérification de la condition 2 suffisante de validité du Path
+            valid = true;
+            return valid;
+        }
+        boolean validOrigin = this.arcs.get(0).getOrigin().equals(this.origin); // Vérification de la ss-condition 3.1 nécessaire de validité du Path
+        boolean validStarts = true;
+        for (int i = 0; i < this.arcs.size()-1; i++) { // Test de la ss-condition 3.2 nécessaire de validité de Path
+            validStarts = validStarts && this.arcs.get(i).getDestination() == this.arcs.get(i+1).getOrigin();
+        }
+        if (validStarts && validOrigin) { // Test des deux ss-conditions nécessaires 3.1 et 3.2 pour valider la condition 3 suffisante à la validité du Path
+            valid = true;
+        }        
+        return valid;
     }
 
     /**
