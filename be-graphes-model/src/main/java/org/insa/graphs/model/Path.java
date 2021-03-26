@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.Action;
+
 /**
  * <p>
  * Class representing a path between nodes in a graph.
@@ -210,11 +212,14 @@ public class Path {
      * 
      * @return Total length of the path (in meters).
      * 
-     * @deprecated Need to be implemented.
      */
     public float getLength() {
-        // TODO:
-        return 0;
+        float len = 0;
+        for (int i = 0; i < this.getArcs().size(); i++) {
+            len = len + this.getArcs().get(i).getLength();
+        }
+        System.out.println("len 2 :" + len);
+        return len;
     }
 
     /**
