@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.And;
+//import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.And;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
@@ -167,44 +167,44 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             while (!heap.isEmpty() && !found) {
                 Label x = heap.deleteMin();
                 x.setMarque(true);
-                System.out.println("Node supprimée : " + x.getSommetNode().getId());
+                System.out.println("Node supprimée : " + x.getCout());
                 this.notifyNodeMarked(x.getSommetNode());
+                found = x.getSommetNode().getId() == data.getDestination().getId();
                 for (Arc arc : x.getSommetNode().getSuccessors()) {
                     if (data.isAllowed(arc)) {
                         Node courantNode = arc.getDestination(); // Node courante de l'itération
                         this.notifyNodeReached(courantNode);
                         Label courantLabel = labels[courantNode.getId()]; /* Label courant correspondant à la Node de l'itération */
-                        if (!found) {
-                            found = courantNode == data.getDestination();
-                        }
-                            System.out.println(found);
+
+//                            System.out.println(found);
 
 
                             if (courantLabel.getCout() > x.getCout() + arc.getLength()) {
-                                if (courantLabel.getCout() >= 1.0f/0.0f) {
-                                    System.out.println("Node courante ajout : " + courantLabel.getSommetNode().getId());
-                                    System.out.println("Node courante ajout nd : " + courantLabel.getSommetNode());
-                                    System.out.println("Label associe ajout : " + courantLabel);
+                                if (Double.isInfinite(courantLabel.getCout())) {
+//                                    System.out.println("Node courante ajout : " + courantLabel.getSommetNode().getId());
+//                                    System.out.println("Node courante ajout nd : " + courantLabel.getSommetNode());
+//                                    System.out.println("Label associe ajout : " + courantLabel);
 
                                     courantLabel.setCout(x.getCout() + arc.getLength());
                                     courantLabel.setPereArc(arc);
                                     heap.insert(courantLabel); /* Insertion de courantLabel s'il n'avait pas été inséré avant */
                                 } else {
-                                    System.out.println("Node courante : " + courantLabel.getSommetNode().getId());
-                                    System.out.println("Node courante nd : " + courantLabel.getSommetNode());
-                                    System.out.println("Label associé : " + courantLabel);
-                                    System.out.println("Cout : " + courantLabel.getCout());
-                                    System.out.println("Marque : " + courantLabel.getMarque());
+//                                    System.out.println("Node courante : " + courantLabel.getSommetNode().getId());
+//                                    System.out.println("Node courante nd : " + courantLabel.getSommetNode());
+//                                    System.out.println("Label associé : " + courantLabel);
+//                                    System.out.println("Cout : " + courantLabel.getCout());
+//                                    System.out.println("Marque : " + courantLabel.getMarque());
+
+                                    heap.remove(courantLabel);
 
                                     courantLabel.setCout(x.getCout() + arc.getLength());
                                     courantLabel.setPereArc(arc);
 
-                                    System.out.println("passed");
+//                                    System.out.println("passed");
                                     /* 
                                         Pour exemple, sur un trajet entre le point 67 et le point 11111, l'algorithme plante systématiquement sur suppression du label associé à la Node 4941
                                     */
                                     
-                                    heap.remove(courantLabel);
 
                                     heap.insert(courantLabel);
                                 }

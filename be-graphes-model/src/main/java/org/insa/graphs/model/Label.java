@@ -11,7 +11,7 @@ public class Label implements Comparable<Label> {
     /**
      * Valeur courante du plus court chemin de l'originie jusqu'au sommet
     */ 
-    private float cout;
+    private double cout;
 
     /**
      * sommet précédent sur le chemin correspondant au plus court chemin courant
@@ -22,7 +22,7 @@ public class Label implements Comparable<Label> {
     public Label(Node sommetNode) {
         this.sommet_courant = sommetNode;
         this.marque = false;
-        this.cout = 1.0f/0.0f;
+        this.cout = Double.POSITIVE_INFINITY;
         this.pereArc = null;
     }
 
@@ -30,7 +30,7 @@ public class Label implements Comparable<Label> {
      * Getter du cout du label
      * @return Cout du label
      */
-    public float getCout() {
+    public double getCout() {
         return this.cout;
     }
 
@@ -66,7 +66,7 @@ public class Label implements Comparable<Label> {
      * Setter de cout
      * @param coutArg
      */
-    public void setCout(float coutArg) {
+    public void setCout(double coutArg) {
         this.cout = coutArg;
     }
 
@@ -84,7 +84,7 @@ public class Label implements Comparable<Label> {
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Label o) {
-        return Float.compare(getCout(), o.getCout());
+        return Double.compare(getCout(), o.getCout());
     }
 
 
