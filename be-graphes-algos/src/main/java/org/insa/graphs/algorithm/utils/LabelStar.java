@@ -1,12 +1,16 @@
-package org.insa.graphs.model;
+package org.insa.graphs.algorithm.utils;
+
+import org.insa.graphs.algorithm.shortestpath.ShortestPathData;
+import org.insa.graphs.model.Node;
 
 public class LabelStar extends Label{
 
     private double estimCout;
 
-    public LabelStar(Node departNode, Node arrivNode) {
+    public LabelStar(Node departNode, Node arrivNode, ShortestPathData data) {
         super(departNode);
         this.estimCout = departNode.getPoint().distanceTo(arrivNode.getPoint());
+        
     }
 
     /**

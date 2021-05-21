@@ -3,17 +3,14 @@ package org.insa.graphs.algorithm.shortestpath;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 //import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.And;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
+import org.insa.graphs.algorithm.utils.BinaryHeap;
+import org.insa.graphs.algorithm.utils.Label;
 import org.insa.graphs.model.Arc;
-import org.insa.graphs.model.Graph;
-import org.insa.graphs.model.Label;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
-
-import org.insa.graphs.algorithm.utils.BinaryHeap;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	
@@ -21,6 +18,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         super(data);
     }
     
+
     /**
      * Get la valeur d'un passé en argument arc en Temps ou en Distance selon le mode indiqué dans la data 
      * @param arc Arc dont la valeur doit être retournée
@@ -44,6 +42,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	return val;
     }
     
+
     protected Label[] initLabels(ShortestPathData data) {
         Label labels[]; /* Tableau référençant toutes les nodes */
         labels = new Label[data.getGraph().size()];

@@ -2,8 +2,8 @@ package org.insa.graphs.algorithm.shortestpath;
 
 import java.util.List;
 
-import org.insa.graphs.model.Label;
-import org.insa.graphs.model.LabelStar;
+import org.insa.graphs.algorithm.utils.Label;
+import org.insa.graphs.algorithm.utils.LabelStar;
 import org.insa.graphs.model.Node;
 
 public class AStarAlgorithm extends DijkstraAlgorithm {
@@ -21,7 +21,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 
         // Ajout des labels initialisés au tas
         for (Node node : listNodes) {
-            LabelStar label = new LabelStar(node, data.getDestination());
+            LabelStar label = new LabelStar(node, data.getDestination(), data);
             if (node.equals(data.getOrigin())) {
                 label.setCout((double) 0.0);
                 label.setPereArc(null);
