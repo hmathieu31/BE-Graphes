@@ -9,129 +9,35 @@ import java.util.Set;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
+import org.insa.graphs.model.Label;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
 
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
-
+	
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
     }
-
-    protected class Label implements Comparable<Label> {
-
-        /** Sommet (Node) associé au label */ 
-        private Node sommet_courant;
     
-        /** Bool, vrai lorsque le coût min de ce sommet est définitivement connu par l'algo */
-        private boolean marque;
-    
-        /**
-         * Valeur courante du plus court chemin de l'originie jusqu'au sommet
-        */ 
-        private float cout;
-    
-        /**
-         * sommet précédent sur le chemin correspondant au plus court chemin courant
-         */
-        private Arc pereArc;
-    
-    
-        public Label(Node sommetNode) {
-            this.sommet_courant = sommetNode;
-            this.marque = false;
-            this.cout = 1.0f/0.0f;
-            this.pereArc = null;
-        }
-    
-        /**
-         * Getter du cout du label
-         * @return Cout du label
-         */
-        public float getCout() {
-            return this.cout;
-        }
-    
-        public float getTotalCout() {
-            return this.cout;
-        }
-    
-        /**
-         * Getter de la marque du label
-         * @return Boolean de marque du label
-         */
-        public boolean getMarque() {
-            return this.marque;
-        }
-    
-        /**
-         * Getter du Pere (sous forme d'arc)
-         * @return pereArc
-         */
-        public Arc getPere() {
-            return this.pereArc;
-        }
-    
-        public Node getSommetNode() {
-            return this.sommet_courant;
-        }
-    
-        /**
-         * Setter de marque
-         * @param marqueBool
-         */
-        public void setMarque(boolean marqueBool) {
-            this.marque = marqueBool;
-        }
-    
-        /**
-         * Setter de cout
-         * @param coutArg
-         */
-        public void setCout(float coutArg) {
-            this.cout = coutArg;
-        }
-    
-        /**
-         * Setter de pereArc
-         * @param pereArcArg
-         */
-        public void setPereArc(Arc pereArcArg) {
-            this.pereArc = pereArcArg;
-        }
-    
-        /**
-         * Compare the cost of this Label with the cost of the given Label
-         * @param o Label to compare this label with
-         * @see java.lang.Comparable#compareTo(java.lang.Object)
-         */
-        public int compareTo(Label o) {
-            return Float.compare(getTotalCout(), o.getCout());
-        }
+    protected double getValue(Arc arc, ShortestPathData data) {
+    	double val = 0;
+    	switch (data.getMode()) {
+		case LENGTH:
+			val = (double)arc.getLength();
+			break;
+			
+		case TIME:
+			val = arc.getMinimumTravelTime();
+			break;
+			
+		default:
+			break;
+		}
+    	return val;
     }
-
     
-    private class LabelStar extends Label{
-
-        private float estimCout;
-    
-        public LabelStar(Node departNode, Node arrivNode) {
-            super(departNode);
-            this.estimCout = (float) Math.sqrt(Math.pow((departNode.getPoint().getLatitude() - arrivNode.getPoint().getLatitude()), 2) + Math.pow((departNode.getPoint().getLongitude() - arrivNode.getPoint().getLongitude()), 2));
-        }
-    
-        /**
-         * Getter de TotalCout
-         */
-        public float getTotalCout() {
-            return this.getCout() + this.estimCout;
-        }
-    
-    
-    }
-
 
     @Override
     protected ShortestPathSolution doRun() {
@@ -167,7 +73,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             while (!heap.isEmpty() && !found) {
                 Label x = heap.deleteMin();
                 x.setMarque(true);
-                System.out.println("Node supprimée : " + x.getCout());
                 this.notifyNodeMarked(x.getSommetNode());
                 found = x.getSommetNode().getId() == data.getDestination().getId();
                 for (Arc arc : x.getSommetNode().getSuccessors()) {
@@ -176,36 +81,18 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                         this.notifyNodeReached(courantNode);
                         Label courantLabel = labels[courantNode.getId()]; /* Label courant correspondant à la Node de l'itération */
 
-//                            System.out.println(found);
-
-
-                            if (courantLabel.getCout() > x.getCout() + arc.getLength()) {
+                            if (courantLabel.getCout() > x.getCout() + this.getValue(arc, data)) {
                                 if (Double.isInfinite(courantLabel.getCout())) {
-//                                    System.out.println("Node courante ajout : " + courantLabel.getSommetNode().getId());
-//                                    System.out.println("Node courante ajout nd : " + courantLabel.getSommetNode());
-//                                    System.out.println("Label associe ajout : " + courantLabel);
 
-                                    courantLabel.setCout(x.getCout() + arc.getLength());
+                                    courantLabel.setCout(x.getCout() + this.getValue(arc, data));
                                     courantLabel.setPereArc(arc);
                                     heap.insert(courantLabel); /* Insertion de courantLabel s'il n'avait pas été inséré avant */
                                 } else {
-//                                    System.out.println("Node courante : " + courantLabel.getSommetNode().getId());
-//                                    System.out.println("Node courante nd : " + courantLabel.getSommetNode());
-//                                    System.out.println("Label associé : " + courantLabel);
-//                                    System.out.println("Cout : " + courantLabel.getCout());
-//                                    System.out.println("Marque : " + courantLabel.getMarque());
-
                                     heap.remove(courantLabel);
 
-                                    courantLabel.setCout(x.getCout() + arc.getLength());
+                                    courantLabel.setCout(x.getCout() + this.getValue(arc, data));
                                     courantLabel.setPereArc(arc);
-
-//                                    System.out.println("passed");
-                                    /* 
-                                        Pour exemple, sur un trajet entre le point 67 et le point 11111, l'algorithme plante systématiquement sur suppression du label associé à la Node 4941
-                                    */
                                     
-
                                     heap.insert(courantLabel);
                                 }
                             }
@@ -213,7 +100,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 }
             }
 
-            System.out.println("Fin algo");
             List<Node> nodes = new ArrayList<Node>();
             Node node = data.getDestination();
             nodes.add(node);
