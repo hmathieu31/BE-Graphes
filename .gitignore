@@ -19,3 +19,4 @@ doc
 *.path
 *.tgz
 Maps
+pom.xml
