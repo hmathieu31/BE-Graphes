@@ -132,6 +132,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     
     }
 
+
     @Override
     protected ShortestPathSolution doRun() {
         final ShortestPathData data = getInputData();
@@ -173,8 +174,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                         Node courantNode = arc.getDestination(); // Node courante de l'itération
                         this.notifyNodeReached(courantNode);
                         Label courantLabel = labels[courantNode.getId()]; /* Label courant correspondant à la Node de l'itération */
-                        found = courantNode == data.getDestination();
-                            System.out.println("----");
+                        if (!found) {
+                            found = courantNode == data.getDestination();
+                        }
+                            System.out.println(found);
 
 
                             if (courantLabel.getCout() > x.getCout() + arc.getLength()) {
