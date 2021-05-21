@@ -35,6 +35,14 @@ public class Label implements Comparable<Label> {
     }
 
     /**
+     * @hidden
+     * @return getCout
+     */
+    public double getTotalCout() {
+        return this.getCout();
+    }
+
+    /**
      * Getter de la marque du label
      * @return Boolean de marque du label
      */
@@ -84,7 +92,7 @@ public class Label implements Comparable<Label> {
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Label o) {
-        return Double.compare(getCout(), o.getCout());
+        return Double.compare(getTotalCout(), o.getTotalCout());
     }
 
 

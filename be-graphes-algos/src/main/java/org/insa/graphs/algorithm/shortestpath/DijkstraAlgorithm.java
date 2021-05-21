@@ -44,6 +44,25 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	return val;
     }
     
+    protected Label[] initLabels(ShortestPathData data) {
+        Label labels[]; /* Tableau référençant toutes les nodes */
+        labels = new Label[data.getGraph().size()];
+
+        List<Node> listNodes = data.getGraph().getNodes();
+
+        // Ajout des labels initialisés au tas
+        for (Node node : listNodes) {
+            Label label = new Label(node);
+            if (node.equals(data.getOrigin())) {
+                label.setCout((double) 0.0);
+                label.setPereArc(null);
+            }
+            labels[node.getId()] = label; // Ajout des labels au tableau labels, qui référence les labels à partir
+                                            // de la Node à laquelle ils sont rattachés
+        }
+        return labels;
+    }
+
 
     @Override
     protected ShortestPathSolution doRun() {
@@ -54,27 +73,14 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             solution = new ShortestPathSolution(data, Status.INFEASIBLE);
         } else {
 
-            Label labels[]; /* Tableau référençant toutes les nodes */
-            labels = new Label[data.getGraph().size()];
-
-            List<Node> listNodes = data.getGraph().getNodes();
-
             // Création du tas de labels
             BinaryHeap<Label> heap = new BinaryHeap<Label>();
 
-            // Ajout des labels initialisés au tas
-            for (Node node : listNodes) {
-                Label label = new Label(node);
-                if (node.equals(data.getOrigin())) {
-                    label.setCout((float) 0.0);
-                    label.setPereArc(null);
-                    heap.insert(label);
-                }
-                labels[node.getId()] = label; // Ajout des labels au tableau labels, qui référence les labels à partir
-                                              // de la Node à laquelle ils sont rattachés
-            }
+            Label[] labels = this.initLabels(data);
+            heap.insert(labels[data.getOrigin().getId()]);
 
-            boolean found = false;
+            boolean found = false; 
+
             // Itérations de l'algorithme
             while (!heap.isEmpty() && !found) {
                 Label x = heap.deleteMin();

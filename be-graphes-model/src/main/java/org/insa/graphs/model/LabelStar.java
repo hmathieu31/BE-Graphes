@@ -2,18 +2,33 @@ package org.insa.graphs.model;
 
 public class LabelStar extends Label{
 
-    private float estimCout;
+    private double estimCout;
 
     public LabelStar(Node departNode, Node arrivNode) {
         super(departNode);
-        this.estimCout = (float) Math.sqrt(Math.pow((departNode.getPoint().getLatitude() - arrivNode.getPoint().getLatitude()), 2) + Math.pow((departNode.getPoint().getLongitude() - arrivNode.getPoint().getLongitude()), 2));
+        this.estimCout = departNode.getPoint().distanceTo(arrivNode.getPoint());
     }
 
     /**
-     * Getter de TotalCout
+     * Getter de TotalCout (Cout actuel + cout estimé)
+     * Redéfinie la méthode getTotalCout de Label
+     * @return Le cout total du label
      */
     public double getTotalCout() {
         return this.getCout() + this.estimCout;
+    }
+
+    /**
+     * Compare the cost of this Label with the cost of the given Label
+     * @param o Label to compare this label with
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    public int compareTo(LabelStar o) {
+        int comp = Double.compare(this.getTotalCout(), o.getTotalCout()) ;
+        if (comp == 0) {
+            comp = Double.compare(this.getTotalCout(), o.getTotalCout());
+        }
+        return comp;
     }
 
 
