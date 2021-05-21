@@ -21,6 +21,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         super(data);
     }
     
+    /**
+     * Get la valeur d'un passé en argument arc en Temps ou en Distance selon le mode indiqué dans la data 
+     * @param arc Arc dont la valeur doit être retournée
+     * @param data Input data contenant le mode de fonctionnement Temps / Distance de l'algo
+     * @return La distance ou le temps de trajet minimum de l'arc
+     */
     protected double getValue(Arc arc, ShortestPathData data) {
     	double val = 0;
     	switch (data.getMode()) {

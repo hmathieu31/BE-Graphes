@@ -12,7 +12,7 @@ public class LabelStar extends Label{
     /**
      * Getter de TotalCout
      */
-    public float getTotalCout() {
+    public double getTotalCout() {
         return this.getCout() + this.estimCout;
     }
 
