@@ -16,10 +16,28 @@ import org.insa.graphs.model.Path;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
-
+	
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
     }
+    
+    protected double getValue(Arc arc, ShortestPathData data) {
+    	double val = 0;
+    	switch (data.getMode()) {
+		case LENGTH:
+			val = (double)arc.getLength();
+			break;
+			
+		case TIME:
+			val = arc.getMinimumTravelTime();
+			break;
+			
+		default:
+			break;
+		}
+    	return val;
+    }
+    
 
     @Override
     protected ShortestPathSolution doRun() {
@@ -63,20 +81,18 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                         this.notifyNodeReached(courantNode);
                         Label courantLabel = labels[courantNode.getId()]; /* Label courant correspondant à la Node de l'itération */
 
-                            if (courantLabel.getCout() > x.getCout() + arc.getLength()) {
+                            if (courantLabel.getCout() > x.getCout() + this.getValue(arc, data)) {
                                 if (Double.isInfinite(courantLabel.getCout())) {
 
-                                    courantLabel.setCout(x.getCout() + arc.getLength());
+                                    courantLabel.setCout(x.getCout() + this.getValue(arc, data));
                                     courantLabel.setPereArc(arc);
                                     heap.insert(courantLabel); /* Insertion de courantLabel s'il n'avait pas été inséré avant */
                                 } else {
-
                                     heap.remove(courantLabel);
 
-                                    courantLabel.setCout(x.getCout() + arc.getLength());
+                                    courantLabel.setCout(x.getCout() + this.getValue(arc, data));
                                     courantLabel.setPereArc(arc);
                                     
-
                                     heap.insert(courantLabel);
                                 }
                             }
