@@ -5,11 +5,27 @@ import org.insa.graphs.model.Node;
 
 public class LabelStar extends Label{
 
+    /**
+     * Temps estimé entre la Node et la Node destination
+     */
     private double estimCout;
 
     public LabelStar(Node departNode, Node arrivNode, ShortestPathData data) {
         super(departNode);
-        this.estimCout = departNode.getPoint().distanceTo(arrivNode.getPoint());
+        double distance = departNode.getPoint().distanceTo(arrivNode.getPoint());
+        switch (data.getMode()) {
+            case LENGTH:
+                this.estimCout = distance;
+                System.out.println("Cout estimé en distance : " + this.estimCout);
+                break;
+
+            case TIME:
+                this.estimCout = distance * 3600.0 / (data.getGraph().getGraphInformation().getMaximumSpeed() * 1000.0);
+                
+            default:
+                break;
+        }
+       
         
     }
 
@@ -24,13 +40,13 @@ public class LabelStar extends Label{
 
     /**
      * Compare the cost of this Label with the cost of the given Label
-     * @param o Label to compare this label with
+     * @param o {@code LabelStar} to compare this label with
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(LabelStar o) {
         int comp = Double.compare(this.getTotalCout(), o.getTotalCout()) ;
-        if (comp == 0) {
-            comp = Double.compare(this.getTotalCout(), o.getTotalCout());
+        if (comp == 0) { /* En cas d'égalité entre 2 sommets, on compare leurs distances estimées */
+            comp = Double.compare(this.estimCout, o.estimCout);
         }
         return comp;
     }

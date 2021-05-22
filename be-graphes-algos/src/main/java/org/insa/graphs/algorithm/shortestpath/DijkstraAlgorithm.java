@@ -20,29 +20,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     
 
     /**
-     * Get la valeur d'un passé en argument arc en Temps ou en Distance selon le mode indiqué dans la data 
-     * @param arc Arc dont la valeur doit être retournée
-     * @param data Input data contenant le mode de fonctionnement Temps / Distance de l'algo
-     * @return La distance ou le temps de trajet minimum de l'arc
+     * Crée et initialise le tableau de labels
+     * @param data Input data de l'algorithm
+     * @return Tableau {@code Label[]} contenant toutes les nodes
      */
-    protected double getValue(Arc arc, ShortestPathData data) {
-    	double val = 0;
-    	switch (data.getMode()) {
-		case LENGTH:
-			val = (double)arc.getLength();
-			break;
-			
-		case TIME:
-			val = arc.getMinimumTravelTime();
-			break;
-			
-		default:
-			break;
-		}
-    	return val;
-    }
-    
-
     protected Label[] initLabels(ShortestPathData data) {
         Label labels[]; /* Tableau référençant toutes les nodes */
         labels = new Label[data.getGraph().size()];
@@ -92,16 +73,17 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                         this.notifyNodeReached(courantNode);
                         Label courantLabel = labels[courantNode.getId()]; /* Label courant correspondant à la Node de l'itération */
 
-                            if (courantLabel.getCout() > x.getCout() + this.getValue(arc, data)) {
+                            if (courantLabel.getCout() > x.getCout() + data.getCost(arc) && courantLabel.getMarque() == false) {
                                 if (Double.isInfinite(courantLabel.getCout())) {
 
-                                    courantLabel.setCout(x.getCout() + this.getValue(arc, data));
+                                    courantLabel.setCout(x.getCout() + data.getCost(arc));
                                     courantLabel.setPereArc(arc);
                                     heap.insert(courantLabel); /* Insertion de courantLabel s'il n'avait pas été inséré avant */
+
                                 } else {
                                     heap.remove(courantLabel);
 
-                                    courantLabel.setCout(x.getCout() + this.getValue(arc, data));
+                                    courantLabel.setCout(x.getCout() + data.getCost(arc));
                                     courantLabel.setPereArc(arc);
                                     
                                     heap.insert(courantLabel);
