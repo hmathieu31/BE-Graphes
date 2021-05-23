@@ -10,8 +10,6 @@ import org.junit.Test;
 
 public class AStarAlgorithmTest extends DijkstraAlgorithmTest{
 
-	/* Liqst  */
-
     /**
 	 * Calculates the solution of data using A* Algorithm
 	 * @param data Input data of A* Algorithm
