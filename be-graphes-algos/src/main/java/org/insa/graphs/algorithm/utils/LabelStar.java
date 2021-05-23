@@ -16,7 +16,6 @@ public class LabelStar extends Label{
         switch (data.getMode()) {
             case LENGTH:
                 this.estimCout = distance;
-                System.out.println("Cout estimé en distance : " + this.estimCout);
                 break;
 
             case TIME:
