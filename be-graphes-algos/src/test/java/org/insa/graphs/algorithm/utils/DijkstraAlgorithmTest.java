@@ -19,10 +19,10 @@ import org.junit.Test;
 public class DijkstraAlgorithmTest {
 
     /* List of Graphs to be used in the tests */
-	private static Graph graphGreatBritain = null ;
-	private static Graph graphToulouse = null ;  
-	private static Graph graphCarre = null ;
-	private static Graph graphHauteGaronne = null ;
+	protected static Graph graphGreatBritain = null ;
+	protected static Graph graphToulouse = null ;  
+	protected static Graph graphCarre = null ;
+	protected static Graph graphHauteGaronne = null ;
 
 
 	/**
