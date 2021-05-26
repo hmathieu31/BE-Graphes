@@ -21,12 +21,34 @@ public class Label implements Comparable<Label> {
      */
     private Arc pereArc;
 
+    /**
+     * Insecurite courante jusqu'au chemin (en nombre de voies ouvertes aux voitures)
+     */
+    private int insecurite;
+
 
     public Label(Node sommetNode) {
         this.sommet_courant = sommetNode;
         this.marque = false;
         this.cout = Double.POSITIVE_INFINITY;
+        this.insecurite = Integer.MAX_VALUE;
         this.pereArc = null;
+    }
+
+    /**
+     * Getter insecurite label
+     * @return insecurite
+     */
+    public int getInsecurite() {
+        return insecurite;
+    }
+
+    /**
+     * Setter de l'insecurite du label
+     * @param insecurite
+     */
+    public void setInsecurite(int insecurite) {
+        this.insecurite = insecurite;
     }
 
     /**
@@ -95,7 +117,11 @@ public class Label implements Comparable<Label> {
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Label o) {
-        return Double.compare(getTotalCout(), o.getTotalCout());
+        int comp = Integer.compare(this.insecurite, o.insecurite);
+        if (comp == 0) {
+            comp = Double.compare(this.getTotalCout(), o.getTotalCout());
+        }
+        return comp;
     }
 
 

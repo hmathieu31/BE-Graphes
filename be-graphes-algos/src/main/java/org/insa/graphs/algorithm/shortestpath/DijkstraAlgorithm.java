@@ -11,6 +11,7 @@ import org.insa.graphs.algorithm.utils.Label;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
+import org.insa.graphs.model.RoadInformation.RoadType;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	
@@ -74,6 +75,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                         Label courantLabel = labels[courantNode.getId()]; /* Label courant correspondant à la Node de l'itération */
 
                             if (courantLabel.getCout() > x.getCout() + data.getCost(arc) && courantLabel.getMarque() == false) {
+                                if (arc.getRoadInformation().getType() != RoadType.CYCLEWAY) {
+                                    courantLabel.setInsecurite(courantLabel.getInsecurite()+1);
+                                }
                                 if (Double.isInfinite(courantLabel.getCout())) {
 
                                     courantLabel.setCout(x.getCout() + data.getCost(arc));
