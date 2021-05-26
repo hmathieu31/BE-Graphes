@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.insa.graphs.algorithm.ArcInspectorFactory;
 //import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.And;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
@@ -11,7 +12,6 @@ import org.insa.graphs.algorithm.utils.Label;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
-import org.insa.graphs.model.RoadInformation.RoadType;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	
@@ -36,6 +36,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             Label label = new Label(node);
             if (node.equals(data.getOrigin())) {
                 label.setCout((double) 0.0);
+                label.setInsecurite(0);
                 label.setPereArc(null);
             }
             labels[node.getId()] = label; // Ajout des labels au tableau labels, qui référence les labels à partir
@@ -66,18 +67,21 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             while (!heap.isEmpty() && !found) {
                 Label x = heap.deleteMin();
                 x.setMarque(true);
-                this.notifyNodeMarked(x.getSommetNode());
+                // this.notifyNodeMarked(x.getSommetNode());
                 found = x.getSommetNode().getId() == data.getDestination().getId();
                 for (Arc arc : x.getSommetNode().getSuccessors()) {
                     if (data.isAllowed(arc)) {
                         Node courantNode = arc.getDestination(); // Node courante de l'itération
-                        this.notifyNodeReached(courantNode);
+                        // this.notifyNodeReached(courantNode);
                         Label courantLabel = labels[courantNode.getId()]; /* Label courant correspondant à la Node de l'itération */
 
                             if (courantLabel.getCout() > x.getCout() + data.getCost(arc) && courantLabel.getMarque() == false) {
-                                if (arc.getRoadInformation().getType() != RoadType.CYCLEWAY) {
-                                    courantLabel.setInsecurite(courantLabel.getInsecurite()+1);
+                                if (ArcInspectorFactory.getAllFilters().get(1).isAllowed(arc)) { /* Test si la route est autorisée aux voitures */
+                                    courantLabel.setInsecurite(x.getInsecurite() +1);
+                                } else {
+                                    courantLabel.setInsecurite(x.getInsecurite());
                                 }
+                                
                                 if (Double.isInfinite(courantLabel.getCout())) {
 
                                     courantLabel.setCout(x.getCout() + data.getCost(arc));
